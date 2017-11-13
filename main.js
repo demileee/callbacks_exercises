@@ -297,10 +297,12 @@ var sales = transactions.filter(function(tx) {
   return tx.type === 'sale';
 });
 
-var first = sales[0].items;
+var sumSales = sales[0].items.map(function(v) {
+  return v.price
+});
 
-var sumSales = first.reduce(function(sum, v) {
-  return [...sum, ...v.price]
+sumSales = sumSales.reduce(function(sum, sale) {
+  return sum + sale
 });
 
 console.log( 'The sum of all sales is:', sumSales );
@@ -317,7 +319,23 @@ console.log( 'The sum of all sales is:', sumSales );
   - Make sure to include 'price' information from *all* purchases.
 */
 
-var sumPurchases;
+var purchases = transactions.filter(function(tx) {
+  return tx.type === 'purchase';
+});
+
+purchases = purchases.map(function(purchase) {
+  return purchase.items
+});
+
+var sumPurchases = [].concat.apply([], purchases);
+
+sumPurchases = sumPurchases.map(function(p) {
+  return p.price
+});
+
+sumPurchases = sumPurchases.reduce(function(s, p) {
+  return (s + p)
+});
 
 console.log( 'The sum of all purhcases is:', sumPurchases );
 
@@ -335,7 +353,27 @@ console.log( 'The sum of all purhcases is:', sumPurchases );
   HINT(S):
   - Unlike 'QUESTION 08' and 'QUESTION 09', here we're interested in both 'sale' and 'purchase' transactions.
 */
-var netProfit;
+
+var sales = transactions.filter(function(tx) {
+  return tx.type === 'sale';
+});
+
+sales = sales.map(function(sale) {
+  return sale.items
+});
+
+var sumSales = [].concat.apply([], sales);
+
+sumSales = sumSales.map(function(s) {
+  return s.price
+});
+
+sumSales = sumSales.reduce(function(sum, sale) {
+  return sum + sale
+});
+
+
+var netProfit = sumSales + sumPurchasesr
 
 console.log( 'The net profit is:', netProfit );
 
